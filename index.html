@@ -289,6 +289,26 @@ footer{border-top:1px solid var(--line);background:var(--ink2);position:relative
 </footer>
 
 <script>
+// ================================================================
+// 画像プロキシ設定
+// macoy.com はホットリンクブロック(403)のため、
+// Cloudflare Worker 経由で画像を取得する。
+//
+// 【設定手順】
+//   1. macoy-img-proxy.js を Cloudflare Workers にデプロイ
+//   2. 発行されたWorker URLを下の IMG_PROXY に設定する
+//      例: 'https://macoy-img-proxy.yourname.workers.dev'
+//   3. '' のままにしておくと直リンクにフォールバック
+//      (ローカル確認用 / Workerデプロイ前)
+// ================================================================
+const IMG_PROXY = ''; // 例: 'https://macoy-img-proxy.yourname.workers.dev'
+
+function proxyImg(originalUrl) {
+  if (!IMG_PROXY) return originalUrl;
+  const path = originalUrl.replace('https://www.macoy.com', '');
+  return `${IMG_PROXY}/?path=${encodeURIComponent(path)}`;
+}
+
 // フォールバックデータ (products.json 未生成時に表示)
 const FALLBACK_ITEMS = [
 {n:'OES ホワイトスターフェズ 1インチ ラインストーンピン付',c:'Fezzes',p:124.00,s:1,img:'https://www.macoy.com/Assets/ProductImages/1587spWhiYlg_wite_backgorund_t.jpg',u:'https://www.macoy.com/OES-Supplies/OES-FEZ-/-Eastern-Star-Sash/OES-White-Star-Fez-with-1-rhinestone-OES-rhinestone-pin-7041.aspx'},
@@ -382,7 +402,7 @@ function render(){
       <div class="card-img">
         ${stockBadge(p.s)}
         ${p.sale?'<span class="badge sale">SALE</span>':''}
-        <img src="${p.img}" alt="${p.n}" loading="lazy" onerror="this.parentElement.style.background='#1c2436';this.style.display='none'">
+        <img src="${proxyImg(p.img)}" alt="${p.n}" loading="lazy" onerror="this.parentElement.style.background='#1c2436';this.style.display='none'">
       </div>
       <div class="card-body">
         <span class="card-cat">${p.c}</span>
@@ -445,7 +465,7 @@ document.getElementById('cartBtn').onclick=()=>{
 
 const modal=document.getElementById('modal');
 function openModal(p){
-  document.getElementById('mImg').src=p.img;
+  document.getElementById('mImg').src=proxyImg(p.img);
   document.getElementById('mImg').alt=p.n;
   document.getElementById('mCat').textContent=p.c+(p.sale?' / SALE':'');
   document.getElementById('mName').textContent=p.n;
