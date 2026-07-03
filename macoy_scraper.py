@@ -34,7 +34,7 @@ import re
 import sys
 import time
 from pathlib import Path
-from urllib.parse import urljoin, urlparse
+from urllib.parse import unquote, urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -76,6 +76,7 @@ SEED_CATEGORIES = {
 OUT_JSON  = Path("products.json")
 STATE_JSON = Path("_crawl_state.json")
 ERROR_LOG = Path("_errors.log")
+IMAGES_DIR = Path("images")
 
 # ==================== ロガー ====================
 logging.basicConfig(
@@ -93,9 +94,67 @@ session.headers.update({
     "Accept-Language": "en-US,en;q=0.9",
 })
 
+# 画像取得専用セッション。ホットリンクブロック回避のため Referer を付与する。
+img_session = requests.Session()
+img_session.headers.update({
+    "User-Agent": USER_AGENT,
+    "Referer": "https://www.macoy.com/",
+    "Accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+})
+
 
 def polite_sleep():
     time.sleep(random.uniform(DELAY_MIN, DELAY_MAX))
+
+
+# ==================== 画像ダウンロード ====================
+def sanitize_filename(name: str) -> str:
+    """URL由来のファイル名を安全なローカル名に整形。"""
+    name = unquote(name)
+    name = re.sub(r"[^A-Za-z0-9._-]", "_", name)
+    name = re.sub(r"_+", "_", name).strip("_.")
+    return name or "img"
+
+
+def _fetch_one_image(image_url: str) -> str | None:
+    """単一URLをダウンロードして images/<filename> を返す。失敗時 None。
+    既に同名ファイルがあれば再取得しない (レジューム/重複対策)。
+    """
+    fname = sanitize_filename(Path(urlparse(image_url).path).name)
+    if not fname or "." not in fname:
+        return None
+    dest = IMAGES_DIR / fname
+    if dest.exists() and dest.stat().st_size > 0:
+        return f"images/{fname}"
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            r = img_session.get(image_url, timeout=TIMEOUT)
+        except requests.RequestException as e:
+            log.warning(f"image download failed {image_url}: {e}")
+            return None
+        if r.status_code == 200 and r.content:
+            IMAGES_DIR.mkdir(exist_ok=True)
+            dest.write_bytes(r.content)
+            return f"images/{fname}"
+        if r.status_code in (429, 500, 502, 503, 504):
+            wait = 2 ** attempt + random.random()
+            log.warning(f"image HTTP {r.status_code} on {image_url} — retry {attempt}/{MAX_RETRIES} in {wait:.1f}s")
+            time.sleep(wait)
+            continue
+        log.info(f"image HTTP {r.status_code} (次候補へ): {image_url}")
+        return None
+    return None
+
+
+def download_image(candidates: list[str]) -> str | None:
+    """候補URLを順に試し、最初に取得できた画像の images/<filename> を返す。"""
+    for url in candidates:
+        if not url or not url.startswith("http"):
+            continue
+        local = _fetch_one_image(url)
+        if local:
+            return local
+    return None
 
 
 def fetch(url: str) -> str | None:
@@ -182,9 +241,23 @@ def extract_product(html: str, url: str) -> dict | None:
     if not name or len(name) < 3:
         return None
 
-    # -- 価格: 本文中の $XX.XX を抽出
-    #    JSON-LDがあれば最優先
+    # -- 価格・画像候補: JSON-LD (schema.org/Product) を最優先で一括抽出。
+    #    画像は複数候補を集めておき、後で実際に取得できたものを採用する
+    #    (サイトによって /images/product/large/ が404で /Assets/... が有効なため)。
     price = None
+    img_candidates: list[str] = []
+
+    def add_candidate(url: str | None):
+        if not url:
+            return
+        url = url.strip()
+        if url.startswith("//"):
+            url = "https:" + url
+        if not url.startswith("http"):
+            url = urljoin(BASE_URL + "/", url.lstrip("/"))
+        if url not in img_candidates:
+            img_candidates.append(url)
+
     for script in soup.find_all("script", type="application/ld+json"):
         try:
             data = json.loads(script.string or "{}")
@@ -192,15 +265,20 @@ def extract_product(html: str, url: str) -> dict | None:
             continue
         items = data if isinstance(data, list) else [data]
         for item in items:
-            offers = item.get("offers") if isinstance(item, dict) else None
-            if isinstance(offers, dict) and offers.get("price"):
+            if not isinstance(item, dict):
+                continue
+            offers = item.get("offers")
+            if price is None and isinstance(offers, dict) and offers.get("price"):
                 try:
                     price = float(offers["price"])
-                    break
                 except (ValueError, TypeError):
                     pass
-        if price:
-            break
+            img_val = item.get("image")
+            if isinstance(img_val, list):
+                for v in img_val:
+                    add_candidate(v if isinstance(v, str) else None)
+            elif isinstance(img_val, str):
+                add_candidate(img_val)
 
     if price is None:
         # フォールバック: 本文から $ を検索
@@ -211,19 +289,38 @@ def extract_product(html: str, url: str) -> dict | None:
     if price is None:
         return None
 
-    # -- 画像: og:image か メイン画像
-    image = None
+    # -- 画像候補を追加: GetImage.ashx?Path=... (表示画像) → og:image → 素の <img>
+    gi = soup.find("img", src=re.compile(r"GetImage\.ashx", re.I))
+    if gi:
+        m = re.search(r"[?&]Path=([^&]+)", gi["src"])
+        if m:
+            add_candidate(unquote(m.group(1)).lstrip("~").lstrip("/"))
     og_img = soup.find("meta", property="og:image")
     if og_img and og_img.get("content"):
-        image = og_img["content"].strip()
-    else:
-        img = soup.find("img", src=re.compile(r"/(ProductImages|Assets)/", re.I))
-        if img:
-            image = urljoin(BASE_URL + "/", img["src"])
-    if image and image.startswith("//"):
-        image = "https:" + image
-    if not image:
+        add_candidate(og_img["content"])
+    img = soup.find("img", src=re.compile(r"/(ProductImages|Assets|images/product)/", re.I))
+    if img:
+        add_candidate(img.get("src"))
+
+    if not img_candidates:
         return None
+
+    # リポジトリ軽量化のため、Assets実体URLからサムネイル(_t)版を派生候補として追加
+    for u in list(img_candidates):
+        m = re.match(r"^(.*/Assets/ProductImages/.+?)(\.[A-Za-z0-9]+)$", u)
+        if m and not Path(urlparse(u).path).stem.endswith("_t"):
+            add_candidate(f"{m.group(1)}_t{m.group(2)}")
+
+    # 優先度: Assetsのサムネイル(_t) → Assets実体 → その他
+    def _prio(u: str) -> int:
+        stem = Path(urlparse(u).path).stem
+        if "/Assets/" in u and stem.endswith("_t"):
+            return 0
+        if "/Assets/" in u:
+            return 1
+        return 2
+    img_candidates.sort(key=_prio)
+    image = img_candidates[0]
 
     # -- 在庫ステータス (テキスト推定)
     body_text = soup.get_text(" ", strip=True).lower()
@@ -256,6 +353,7 @@ def extract_product(html: str, url: str) -> dict | None:
         "s": stock,
         "img": image,
         "u": url,
+        "_imgs": img_candidates,  # ダウンロード試行用の候補一覧 (保存前に除去)
     }
 
 
@@ -368,6 +466,13 @@ def main():
                 log_error(url, f"parse error: {e}")
                 continue
             if item:
+                # 画像をローカルに保存し、imgフィールドを相対パスへ書き換える
+                candidates = item.pop("_imgs", [item["img"]])
+                if item["img"].startswith("http"):
+                    local = download_image(candidates)
+                    polite_sleep()
+                    if local:
+                        item["img"] = local
                 state["products"].append(item)
                 if i % 5 == 0:
                     log.info(f"    {i}/{len(product_urls)} … 現在 {len(state['products'])}点")

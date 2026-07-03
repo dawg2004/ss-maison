@@ -1,0 +1,13 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# スクレイパーの実行時生成物 (レジューム状態・ログ)
+_crawl_state.json
+_run.log
+_errors.log
+
+# エディタ / OS
+.DS_Store
+.playwright-mcp/
