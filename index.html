@@ -304,6 +304,8 @@ footer{border-top:1px solid var(--line);background:var(--ink2);position:relative
 const IMG_PROXY = ''; // 例: 'https://macoy-img-proxy.yourname.workers.dev'
 
 function proxyImg(originalUrl) {
+  if (!originalUrl) return originalUrl;
+  if (!originalUrl.startsWith('http')) return originalUrl; // ローカル画像(images/xxx.jpg)はそのまま
   if (!IMG_PROXY) return originalUrl;
   const path = originalUrl.replace('https://www.macoy.com', '');
   return `${IMG_PROXY}/?path=${encodeURIComponent(path)}`;
