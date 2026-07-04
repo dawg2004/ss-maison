@@ -45,6 +45,7 @@ DELAY_MIN = 1.0
 DELAY_MAX = 1.6
 TIMEOUT = 25
 MAX_RETRIES = 4
+MAX_SUBCATEGORY_DEPTH = 3  # サブカテゴリ一覧を辿る最大パス深度 (末端商品ページの暴走巡回を防止)
 USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) "
     "AppleWebKit/605.1.15 (KHTML, like Gecko) "
@@ -225,6 +226,85 @@ def find_next_page(html: str, current_url: str) -> str | None:
     return None
 
 
+# カテゴリ以外(アカウント/情報ページ等)を除外するためのパスキーワード
+NON_CATEGORY_KEYWORDS = (
+    "login", "cart", "checkout", "wishlist", "account", "register", "members",
+    "contactus", "contact", "aboutus", "about", "default", "search", "sitemap",
+    "privacy", "terms", "return-policy", "faq", "email", "cdn-cgi", "sign-up",
+    "custom-embroidery", "grand-lodge-of-virginia", "learn-more", "meaning-of",
+    "historical-sketch", "secret-discipline", "albert-mackey", "compare",
+    "review", "tell-a-friend", "buyproduct",
+)
+
+
+def is_category_path(path: str) -> bool:
+    """URLパスがカテゴリ/サブカテゴリ一覧ページらしいか判定 (.aspx商品や情報ページを除外)。"""
+    last = path.rstrip("/").split("/")[-1]
+    if not last or "." in last:  # ファイル/.aspx は対象外
+        return False
+    low = path.lower()
+    return not any(x in low for x in NON_CATEGORY_KEYWORDS)
+
+
+def looks_like_product(html: str) -> bool:
+    """ページ自体が商品ページか判定 (JSON-LDにProduct型＋offers.priceがあるか)。
+    macoy.comの書籍などは .aspx でないスラッグURLの商品ページのため、
+    リンクパターンでは拾えず、この判定で捕捉する。
+    """
+    soup = BeautifulSoup(html, "lxml")
+    for sc in soup.find_all("script", type="application/ld+json"):
+        try:
+            data = json.loads(sc.string or "{}")
+        except (json.JSONDecodeError, TypeError):
+            continue
+        for item in (data if isinstance(data, list) else [data]):
+            if not isinstance(item, dict):
+                continue
+            t = item.get("@type", "")
+            is_product = t == "Product" or (isinstance(t, list) and "Product" in t)
+            offers = item.get("offers")
+            if is_product and isinstance(offers, dict) and offers.get("price"):
+                return True
+    return False
+
+
+def find_subcategory_links(html: str) -> set[str]:
+    """一覧ページから配下のサブカテゴリ一覧ページへのリンクを抽出。"""
+    soup = BeautifulSoup(html, "lxml")
+    subs = set()
+    for a in soup.find_all("a", href=True):
+        href = a["href"].strip()
+        if not href or href.startswith(("#", "mailto:", "javascript:", "tel:")):
+            continue
+        full = absolutize(href)
+        if not full.startswith(BASE_URL):
+            continue
+        if is_category_path(urlparse(full).path):
+            subs.add(full)
+    return subs
+
+
+def discover_seed_categories() -> dict[str, str]:
+    """トップページのナビゲーションから実在するカテゴリURLを自動発見。
+    ハードコードSEEDには404が混じるため、これを優先的に使う。
+    """
+    html = fetch(BASE_URL + "/")
+    polite_sleep()
+    if not html:
+        log.warning("トップページ取得失敗 — ハードコードSEEDにフォールバック")
+        return dict(SEED_CATEGORIES)
+    seeds: dict[str, str] = {}
+    for full in find_subcategory_links(html):
+        path = urlparse(full).path
+        name = path.strip("/").replace("/", "__")
+        seeds[name] = path
+    log.info(f"ナビから {len(seeds)} カテゴリ/サブカテゴリを自動発見")
+    # ハードコードSEEDも(存在すれば)補完的にマージ
+    for name, path in SEED_CATEGORIES.items():
+        seeds.setdefault(name, path)
+    return seeds
+
+
 def extract_product(html: str, url: str) -> dict | None:
     """商品詳細ページから構造化データを抽出。"""
     soup = BeautifulSoup(html, "lxml")
@@ -358,17 +438,26 @@ def extract_product(html: str, url: str) -> dict | None:
 
 
 # ==================== 一覧クロール ====================
-def crawl_category(seed_url: str, limit: int | None) -> list[str]:
-    """カテゴリ配下のすべての商品URLを収集。"""
-    visited_pages = set()
+def crawl_category(seed_url: str, limit: int | None,
+                   visited_pages: set | None = None, max_pages: int = 300) -> list[str]:
+    """カテゴリ配下のすべての商品URLを収集。
+    サブカテゴリ (同一セクション配下の一覧ページ) とページャーの両方を辿る。
+    visited_pages を渡すとカテゴリ横断で共有し、重複巡回を避ける。
+    """
+    if visited_pages is None:
+        visited_pages = set()
     product_urls: set[str] = set()
     queue = [seed_url]
+    # サブカテゴリ探索を同一セクション(先頭パスセグメント)に限定して暴走を防ぐ
+    seed_section = urlparse(seed_url).path.strip("/").split("/")[0].lower()
+    pages_done = 0
 
     while queue:
         page = queue.pop(0)
         if page in visited_pages:
             continue
         visited_pages.add(page)
+        pages_done += 1
 
         log.info(f"  [list] {page}")
         html = fetch(page)
@@ -377,17 +466,35 @@ def crawl_category(seed_url: str, limit: int | None) -> list[str]:
             continue
 
         found = find_product_links(html)
+        # このページ自体が商品ページ (スラッグURLの書籍等) なら商品として捕捉
+        if looks_like_product(html):
+            found.add(page)
         new = found - product_urls
         product_urls.update(new)
-        log.info(f"        + {len(new)} products (total {len(product_urls)})")
+        if new:
+            log.info(f"        + {len(new)} products (total {len(product_urls)})")
 
         if limit and len(product_urls) >= limit:
             break
+        if pages_done >= max_pages:
+            log.info(f"        max_pages={max_pages} 到達、このカテゴリの探索を打ち切り")
+            break
 
-        # サブカテゴリ / ページャーを探す (単純な "Next" のみ、深追いしすぎない)
+        # ページャー ("Next")
         nxt = find_next_page(html, page)
         if nxt and nxt not in visited_pages:
             queue.append(nxt)
+
+        # サブカテゴリ (同一セクション配下の一覧ページのみ)。
+        # パス深度 <= MAX_SUBCATEGORY_DEPTH に制限し、末端の個別商品ページ
+        # (例: /Masonic-Store/.../Generic-LodgeChapter-Shirts/<Lodge名>-Shirt) を
+        # サブカテゴリ扱いで無限に辿るのを防ぐ。
+        for sub in find_subcategory_links(html):
+            sub_parts = urlparse(sub).path.strip("/").split("/")
+            if sub in visited_pages or sub in queue:
+                continue
+            if sub_parts[0].lower() == seed_section and len(sub_parts) <= MAX_SUBCATEGORY_DEPTH:
+                queue.append(sub)
 
     return sorted(product_urls)[:limit] if limit else sorted(product_urls)
 
@@ -426,14 +533,23 @@ def main():
     ap.add_argument("--resume", action="store_true", help="中断状態から再開")
     ap.add_argument("--limit", type=int, help="各カテゴリで最大何商品まで取るか (テスト用)")
     ap.add_argument("--category", help="特定カテゴリ名のみ実行 (例: Fezzes)")
+    ap.add_argument("--no-discover", action="store_true",
+                    help="ナビ自動発見を使わずハードコードSEEDのみ使用")
     args = ap.parse_args()
 
     state = load_state() if args.resume else {"done_categories": [], "products": []}
     log.info(f"開始: 既存 {len(state['products'])}件 / 完了カテゴリ {len(state['done_categories'])}件")
 
-    categories = SEED_CATEGORIES.items()
     if args.category:
         categories = [(args.category, SEED_CATEGORIES.get(args.category, f"/{args.category}"))]
+    elif args.no_discover:
+        categories = list(SEED_CATEGORIES.items())
+    else:
+        categories = list(discover_seed_categories().items())
+
+    # カテゴリ横断で共有する巡回済み一覧ページ / 収集済み商品URL
+    visited_pages: set[str] = set()
+    seen_products: set[str] = {p["u"] for p in state["products"]}
 
     for cat_name, cat_path in categories:
         if cat_name in state["done_categories"] and not args.category:
@@ -444,17 +560,19 @@ def main():
         seed = absolutize(cat_path)
 
         try:
-            product_urls = crawl_category(seed, args.limit)
+            product_urls = crawl_category(seed, args.limit, visited_pages=visited_pages)
         except KeyboardInterrupt:
             log.warning("Ctrl+C で中断。現状を保存します")
             save_state(state)
             save_products(state["products"])
             return
 
-        log.info(f"→ {cat_name}: 商品URL {len(product_urls)}件を取得。詳細フェッチ開始")
+        # 既に他カテゴリで取得済みの商品を除外
+        product_urls = [u for u in product_urls if u not in seen_products]
+        log.info(f"→ {cat_name}: 新規商品URL {len(product_urls)}件を取得。詳細フェッチ開始")
 
         for i, url in enumerate(product_urls, 1):
-            if any(p["u"] == url for p in state["products"]):
+            if url in seen_products:
                 continue
             html = fetch(url)
             polite_sleep()
@@ -474,6 +592,7 @@ def main():
                     if local:
                         item["img"] = local
                 state["products"].append(item)
+                seen_products.add(url)
                 if i % 5 == 0:
                     log.info(f"    {i}/{len(product_urls)} … 現在 {len(state['products'])}点")
                     save_products(state["products"])
