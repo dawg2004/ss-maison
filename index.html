@@ -3,503 +3,656 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MACOY JAPAN | メイソニック用品・OESレガリア 1849年創業</title>
+<title>prmpt | ARCHIVE COLLECTION</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#0E1420;--ink2:#141C2C;--paper:#F2E9D8;--gold:#C9A24B;--gold-dim:#8a7136;--crimson:#8E2A35;--mute:#8B93A5;--line:rgba(201,162,75,.28);--radius:10px}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--ink);color:var(--paper);font-family:'Zen Kaku Gothic New',sans-serif;line-height:1.7;overflow-x:hidden}
-::selection{background:var(--gold);color:var(--ink)}
-.bg-geo{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:radial-gradient(circle at 20% 30%,var(--gold) 1px,transparent 1px),radial-gradient(circle at 80% 70%,var(--gold) 1px,transparent 1px);background-size:90px 90px,120px 120px}
-header{position:sticky;top:0;z-index:100;background:rgba(14,20,32,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.hd-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;gap:16px}
-.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--paper)}
-.brand-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;letter-spacing:.14em}
-.brand-sub{font-size:.62rem;letter-spacing:.3em;color:var(--gold);display:block;margin-top:-4px}
-nav.pc-nav{display:flex;gap:26px}
-nav.pc-nav a{color:var(--paper);text-decoration:none;font-size:.86rem;letter-spacing:.08em;position:relative;padding:4px 0;transition:color .25s}
-nav.pc-nav a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold);transition:width .3s}
-nav.pc-nav a:hover{color:var(--gold)}
-nav.pc-nav a:hover::after{width:100%}
-.hd-tools{display:flex;align-items:center;gap:14px}
-.cart-btn{position:relative;background:none;border:1px solid var(--line);color:var(--paper);border-radius:50%;width:42px;height:42px;cursor:pointer;display:grid;place-items:center;transition:border-color .25s,transform .2s}
-.cart-btn:hover{border-color:var(--gold);transform:translateY(-2px)}
-.cart-count{position:absolute;top:-6px;right:-6px;background:var(--crimson);color:#fff;font-size:.65rem;font-weight:700;border-radius:50%;min-width:19px;height:19px;display:grid;place-items:center;padding:0 4px}
-.menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--paper);border-radius:8px;width:42px;height:42px;cursor:pointer;font-size:1.1rem}
-.drawer{position:fixed;top:0;right:-300px;width:280px;height:100vh;z-index:200;background:var(--ink2);border-left:1px solid var(--line);transition:right .35s cubic-bezier(.2,.8,.2,1);padding:70px 26px 26px;display:flex;flex-direction:column;gap:6px}
-.drawer.open{right:0}
-.drawer a{color:var(--paper);text-decoration:none;padding:13px 8px;border-bottom:1px solid rgba(201,162,75,.12);font-size:.95rem;letter-spacing:.06em}
-.drawer-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--gold);font-size:1.5rem;cursor:pointer}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:150;opacity:0;pointer-events:none;transition:opacity .3s}
-.overlay.show{opacity:1;pointer-events:auto}
-.hero{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:72px 24px 60px;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
-.hero-eyebrow{color:var(--gold);font-size:.75rem;letter-spacing:.42em;border:1px solid var(--line);display:inline-block;padding:7px 18px;border-radius:99px;margin-bottom:26px}
-.hero h1{font-family:'Shippori Mincho',serif;font-weight:800;font-size:clamp(2rem,4.6vw,3.5rem);line-height:1.35;letter-spacing:.04em;margin-bottom:22px}
-.hero h1 em{font-style:normal;color:var(--gold)}
-.hero p{color:var(--mute);max-width:520px;font-size:.96rem;margin-bottom:34px}
-.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 30px;border-radius:99px;text-decoration:none;font-size:.9rem;font-weight:700;letter-spacing:.1em;cursor:pointer;transition:transform .2s,box-shadow .25s;border:none}
-.btn:hover{transform:translateY(-2px)}
-.btn-gold{background:linear-gradient(135deg,#E3C476,var(--gold) 60%,#A87F2E);color:var(--ink);box-shadow:0 6px 24px rgba(201,162,75,.25)}
-.btn-line{background:transparent;color:var(--paper);border:1px solid var(--line)}
-.btn-line:hover{border-color:var(--gold);color:var(--gold)}
-.emblem-wrap{display:grid;place-items:center;position:relative}
-.emblem{width:min(360px,80vw);height:auto;filter:drop-shadow(0 0 40px rgba(201,162,75,.18))}
-.rot-slow{transform-origin:center;animation:spin 60s linear infinite}
-.rot-rev{transform-origin:center;animation:spinrev 90s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes spinrev{to{transform:rotate(-360deg)}}
-@media (prefers-reduced-motion:reduce){.rot-slow,.rot-rev{animation:none}*{transition:none!important}}
-.stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--ink2);position:relative;z-index:1}
-.stats-inner{max-width:1280px;margin:0 auto;padding:26px 24px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
-.stat b{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--gold);display:block;line-height:1.2}
-.stat span{font-size:.74rem;color:var(--mute);letter-spacing:.12em}
-.shop{max-width:1280px;margin:0 auto;padding:70px 24px;position:relative;z-index:1}
-.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:30px}
-.sec-title{font-family:'Shippori Mincho',serif;font-size:clamp(1.5rem,3vw,2.1rem);font-weight:700;letter-spacing:.06em}
-.sec-title small{display:block;color:var(--gold);font-size:.72rem;letter-spacing:.4em;margin-bottom:8px;font-family:'Zen Kaku Gothic New',sans-serif}
-.rate-box{display:flex;align-items:center;gap:10px;font-size:.8rem;color:var(--mute);border:1px solid var(--line);border-radius:99px;padding:8px 16px}
-.rate-box input{width:64px;background:var(--ink);border:1px solid var(--line);color:var(--gold);border-radius:6px;padding:4px 8px;font-size:.85rem;text-align:right;font-family:inherit}
-.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.chip{background:transparent;border:1px solid var(--line);color:var(--paper);padding:9px 20px;border-radius:99px;cursor:pointer;font-size:.83rem;letter-spacing:.06em;transition:all .25s;font-family:inherit}
-.chip:hover{border-color:var(--gold);color:var(--gold)}
-.chip.active{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700}
-.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;align-items:center}
-.search-box{flex:1;min-width:220px;display:flex;align-items:center;gap:10px;background:var(--ink2);border:1px solid var(--line);border-radius:99px;padding:10px 20px}
-.search-box input{flex:1;background:none;border:none;outline:none;color:var(--paper);font-size:.9rem;font-family:inherit}
-.search-box input::placeholder{color:var(--mute)}
-select.sort{background:var(--ink2);border:1px solid var(--line);color:var(--paper);border-radius:99px;padding:10px 18px;font-size:.85rem;font-family:inherit;cursor:pointer}
-.meta-bar{color:var(--mute);font-size:.78rem;letter-spacing:.05em;margin-bottom:22px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-.meta-bar b{color:var(--gold);font-weight:600}
-.source-tag{background:rgba(201,162,75,.12);border:1px solid var(--line);border-radius:99px;padding:3px 12px;font-size:.7rem;color:var(--gold);letter-spacing:.14em}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
-.card{background:var(--ink2);border:1px solid rgba(201,162,75,.14);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:transform .3s,border-color .3s,box-shadow .3s;display:flex;flex-direction:column;opacity:0;transform:translateY(18px)}
-.card.in{opacity:1;transform:translateY(0);transition:opacity .5s,transform .5s,border-color .3s,box-shadow .3s}
-.card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 16px 40px rgba(0,0,0,.45)}
-.card-img{position:relative;background:#fff;aspect-ratio:1;overflow:hidden}
-.card-img img{width:100%;height:100%;object-fit:contain;padding:14px;transition:transform .45s}
-.card:hover .card-img img{transform:scale(1.07)}
-.badge{position:absolute;top:10px;left:10px;font-size:.66rem;font-weight:700;letter-spacing:.08em;padding:4px 12px;border-radius:99px}
-.badge.stock{background:rgba(30,90,50,.92);color:#CFEBD8}
-.badge.order{background:rgba(120,90,20,.92);color:#F4E5BC}
-.badge.sold{background:rgba(90,30,30,.92);color:#F4CDCD}
-.badge.sale{position:absolute;top:10px;right:10px;left:auto;background:var(--crimson);color:#fff}
-.card-body{padding:18px;display:flex;flex-direction:column;gap:8px;flex:1}
-.card-cat{font-size:.66rem;color:var(--gold);letter-spacing:.24em}
-.card-name{font-size:.92rem;font-weight:500;line-height:1.55;flex:1}
-.card-price{display:flex;align-items:baseline;gap:10px;margin-top:4px}
-.p-usd{font-family:'Cormorant Garamond',serif;font-size:1.45rem;color:var(--gold);font-weight:600}
-.p-jpy{font-size:.76rem;color:var(--mute)}
-.card-add{margin-top:10px;background:transparent;border:1px solid var(--line);color:var(--paper);border-radius:8px;padding:10px;font-size:.82rem;letter-spacing:.1em;cursor:pointer;transition:all .25s;font-family:inherit;font-weight:700}
-.card-add:hover{background:var(--gold);color:var(--ink);border-color:var(--gold)}
-.empty,.loading{grid-column:1/-1;text-align:center;color:var(--mute);padding:70px 0;border:1px dashed var(--line);border-radius:var(--radius)}
-.spinner{display:inline-block;width:28px;height:28px;border:2px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:spinL 1s linear infinite;margin-bottom:14px}
-@keyframes spinL{to{transform:rotate(360deg)}}
-.pagination{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:40px;flex-wrap:wrap}
-.pagination button{background:transparent;border:1px solid var(--line);color:var(--paper);width:38px;height:38px;border-radius:8px;cursor:pointer;font-family:inherit;transition:all .25s}
-.pagination button:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
-.pagination button.on{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:700}
-.pagination button:disabled{opacity:.3;cursor:not-allowed}
-.modal{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:20px;background:rgba(5,8,14,.8);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .3s}
-.modal.show{opacity:1;pointer-events:auto}
-.modal-card{background:var(--ink2);border:1px solid var(--gold);border-radius:14px;max-width:760px;width:100%;max-height:88vh;overflow:auto;display:grid;grid-template-columns:1fr 1fr;transform:scale(.94);transition:transform .3s}
-.modal.show .modal-card{transform:scale(1)}
-.modal-img{background:#fff;display:grid;place-items:center;min-height:300px}
-.modal-img img{width:100%;height:100%;object-fit:contain;padding:20px;max-height:420px}
-.modal-info{padding:32px 28px;display:flex;flex-direction:column;gap:14px}
-.modal-info h3{font-family:'Shippori Mincho',serif;font-size:1.25rem;line-height:1.5}
-.modal-close{position:absolute;top:14px;right:18px;background:var(--ink);border:1px solid var(--line);color:var(--gold);border-radius:50%;width:38px;height:38px;font-size:1.1rem;cursor:pointer}
-.modal-link{color:var(--gold);font-size:.82rem;text-decoration:none;border-bottom:1px dotted var(--gold)}
-footer{border-top:1px solid var(--line);background:var(--ink2);position:relative;z-index:1;margin-top:40px}
-.ft-inner{max-width:1280px;margin:0 auto;padding:50px 24px 30px;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:36px}
-.ft-inner h4{font-size:.75rem;color:var(--gold);letter-spacing:.3em;margin-bottom:16px;font-weight:700}
-.ft-inner p,.ft-inner a{color:var(--mute);font-size:.84rem;text-decoration:none;display:block;line-height:2.1}
-.ft-inner a:hover{color:var(--gold)}
-.ft-note{max-width:1280px;margin:0 auto;padding:18px 24px;border-top:1px solid rgba(201,162,75,.12);font-size:.72rem;color:var(--mute);text-align:center;letter-spacing:.05em}
-.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--gold);color:var(--ink);font-weight:700;font-size:.85rem;padding:13px 30px;border-radius:99px;z-index:400;transition:transform .35s;box-shadow:0 10px 30px rgba(0,0,0,.4)}
-.toast.show{transform:translateX(-50%) translateY(0)}
-@media (max-width:900px){nav.pc-nav{display:none}.menu-btn{display:block}.hero{grid-template-columns:1fr;padding:48px 20px 40px;text-align:center}.hero p{margin-left:auto;margin-right:auto}.hero-cta{justify-content:center}.emblem-wrap{order:-1}.emblem{width:min(240px,64vw)}.stats-inner{grid-template-columns:repeat(2,1fr);gap:22px 12px}.modal-card{grid-template-columns:1fr}.ft-inner{grid-template-columns:1fr;gap:26px}.sec-head{flex-direction:column;align-items:flex-start}}
-@media (max-width:520px){.grid{grid-template-columns:repeat(2,1fr);gap:12px}.card-body{padding:12px}.card-name{font-size:.78rem}.p-usd{font-size:1.15rem}.card-add{font-size:.72rem;padding:8px}.chip{padding:7px 14px;font-size:.74rem}}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: #fff; }
+body {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+}
+#scroll-spacer {
+  position: relative;
+  height: 500vh;
+  background: #fff;
+  -webkit-user-select: none;
+  user-select: none;
+}
+@media (hover: hover) and (pointer: fine) and (min-width: 1024px) {
+  body { cursor: none; }
+}
+
+/* ---------- 1A custom cursor ---------- */
+#cursor {
+  position: fixed;
+  left: -100px;
+  top: -100px;
+  z-index: 50;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: exclusion;
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) and (min-width: 1024px) {
+  #cursor { display: block; }
+}
+
+/* ---------- fade-in entry animation ---------- */
+.fade-up {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.6s cubic-bezier(0.25, 0.1, 0.25, 1),
+              transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.fade-up.in { opacity: 1; transform: translateY(0); }
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.fade-in.in { opacity: 1; }
+
+/* ---------- 1B logo ---------- */
+#logo {
+  position: fixed;
+  top: 32px; left: 32px;
+  z-index: 20;
+  pointer-events: none;
+  mix-blend-mode: exclusion;
+  width: 355px;
+}
+/* ---------- 1C caption ---------- */
+#caption {
+  position: fixed;
+  left: 32px; top: 244px;
+  width: 692px;
+  z-index: 20;
+  pointer-events: none;
+  mix-blend-mode: exclusion;
+  font-size: 12px;
+  line-height: 140%;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+/* ---------- 1D header nav ---------- */
+#nav {
+  position: fixed;
+  top: 32px; right: 32px;
+  width: 330px; height: 30px;
+  z-index: 20;
+  pointer-events: none;
+  mix-blend-mode: exclusion;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+#nav .nav-right { display: flex; align-items: center; gap: 50px; }
+#nav .ic-menu { width: 30px; height: 30px; }
+/* ---------- 1E product info ---------- */
+#outro-info {
+  position: fixed;
+  right: 32px; bottom: 80px;
+  width: 330px;
+  z-index: 20;
+  pointer-events: none;
+  mix-blend-mode: exclusion;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+}
+#outro-info .top-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 32px;
+}
+#outro-info .circle-wrap {
+  position: relative;
+  width: 30px; height: 30px;
+  margin-bottom: 14px;
+}
+#circle-symbol {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+#outro-info .col-label {
+  width: 100%;
+  font-size: 30px;
+  line-height: 100%;
+  text-align: center;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+#outro-info .price {
+  font-size: 80px;
+  line-height: 100%;
+  text-align: center;
+  letter-spacing: -0.04em;
+}
+/* ---------- 1F view button ---------- */
+#outro-buy {
+  position: fixed;
+  right: 32px; bottom: 32px;
+  width: 330px; height: 174px;
+  z-index: 20;
+  pointer-events: none;
+  mix-blend-mode: exclusion;
+  transform-origin: right bottom;
+  transform: scale(0);
+  background: #fff;
+  border-radius: 1335px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+#outro-buy span {
+  font-size: 110px;
+  letter-spacing: -0.04em;
+  color: #fff;
+  mix-blend-mode: exclusion;
+  line-height: 100%;
+}
+/* ---------- 1G video ---------- */
+#main-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#main-canvas video {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+#vid-left { display: none; }
+#vid-right { display: block; }
+/* ---------- 1I white overlay ---------- */
+#outro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  background: #fff;
+  opacity: 0;
+}
+/* ---------- 1J footer ---------- */
+#outro-footer {
+  position: fixed;
+  left: 16px; bottom: 32px;
+  z-index: 20;
+  pointer-events: none;
+  mix-blend-mode: exclusion;
+  opacity: 0;
+  display: flex;
+  gap: 80px;
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+/* ---------- 2 black panel ---------- */
+#black-panel {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 10;
+  transform: translateY(100vh);
+  overflow: hidden;
+}
+#panel-wrap {
+  width: 100%;
+  padding-top: min(400px, 40vh);
+}
+#panel-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 0 16px 20vh;
+}
+.bp-card {
+  aspect-ratio: 2 / 3;
+  will-change: transform;
+  transform: scale(0);
+  overflow: hidden;
+}
+.bp-card img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.bp-empty { aspect-ratio: 2 / 3; }
+@media (prefers-reduced-motion: reduce) {
+  .bp-card { will-change: auto; }
+}
+
+/* ---------- responsive: tablet 640-1024 ---------- */
+@media (max-width: 1023px) {
+  #logo { width: 266px; }
+  #caption { top: 180px; width: calc(50vw - 48px); }
+  #panel-grid { grid-template-columns: repeat(3, 1fr); }
+  #nav .nav-right { gap: 20px; }
+}
+/* ---------- responsive: mobile <640 ---------- */
+@media (max-width: 639px) {
+  #logo { width: 124px; top: 16px; left: 16px; }
+  #caption { left: 16px; top: 118px; width: calc(100vw - 32px); }
+  #nav {
+    top: 16px; right: 16px;
+    width: auto;
+  }
+  #nav .nav-about { display: none; }
+  #nav .ic-menu { width: 24px; height: 24px; }
+  #nav .cart { font-size: 13px; }
+  #outro-info {
+    left: 0; right: 0;
+    width: auto;
+    bottom: 48px;
+  }
+  #outro-info .top-block { width: 252px; margin: 0 auto 12px; }
+  #outro-info .circle-wrap { width: 20px; height: 20px; margin-bottom: 10px; }
+  #circle-symbol { font-size: 10px; }
+  #outro-info .col-label { font-size: 20px; }
+  #outro-info .price { font-size: 60px; }
+  #outro-buy {
+    left: 16px; right: 16px;
+    width: auto; height: 100px;
+    bottom: 60px;
+  }
+  #outro-buy span { font-size: 72px; }
+  #main-canvas {
+    top: 220px;
+    height: calc(100vh - 220px);
+  }
+  #outro-footer {
+    bottom: 24px;
+    left: 16px; right: 16px;
+    gap: 0;
+    justify-content: space-between;
+    font-size: 11px;
+  }
+  #panel-grid { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body>
-<div class="bg-geo"></div>
+<div id="scroll-spacer">
 
-<header>
-  <div class="hd-inner">
-    <a class="brand" href="#top">
-      <svg width="38" height="38" viewBox="0 0 40 40" fill="none">
-        <polygon points="20,3 24,15 37,15 26.5,22.5 30.5,35 20,27 9.5,35 13.5,22.5 3,15 16,15" stroke="#C9A24B" stroke-width="1.4" fill="none"/>
-        <circle cx="20" cy="20" r="5.5" stroke="#C9A24B" stroke-width="1" fill="none"/>
+  <!-- 1G video container -->
+  <div id="main-canvas">
+    <video id="vid-left" muted playsinline preload="auto"
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_39ca84eAE1ODL9hbR5VhoEj8tBf/hf_20260625_154433_532a85d3-dabf-4265-b8bd-19ac6af31842.mp4"></video>
+    <video id="vid-right" muted playsinline preload="auto"
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_39ca84eAE1ODL9hbR5VhoEj8tBf/hf_20260625_154401_a664f076-b971-4557-8728-40ef9ea4c49b.mp4"></video>
+  </div>
+
+  <!-- 2 black panel gallery -->
+  <div id="black-panel">
+    <div id="panel-wrap">
+      <div id="panel-grid"></div>
+    </div>
+  </div>
+
+  <!-- 1I white overlay -->
+  <div id="outro-overlay"></div>
+
+  <!-- 1B logo -->
+  <div id="logo" class="fade-up">
+    <svg viewBox="0 0 355 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+      <text x="0" y="86" fill="#fff" font-family="'Inter Tight',sans-serif" font-weight="500"
+        font-size="104" letter-spacing="-6">prmpt</text>
+      <g transform="translate(322,14)">
+        <circle cx="14" cy="14" r="12.5" stroke="#fff" stroke-width="2.5" fill="none"/>
+        <text x="14" y="19" fill="#fff" text-anchor="middle"
+          font-family="'Inter Tight',sans-serif" font-weight="500" font-size="14">R</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- 1C caption -->
+  <div id="caption" class="fade-up">When switching between videos near the center, do not reset currentTime to 0 abruptly. Add a small dead zone: if cursor is within +/-50px of center, keep both videos at currentTime = 0 and show whichever was last active.</div>
+
+  <!-- 1D nav -->
+  <div id="nav" class="fade-up">
+    <span class="nav-about">ABOUT</span>
+    <span class="nav-right">
+      <svg class="ic-menu" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <path d="M0 14H40" stroke="#fff" stroke-width="2.5"/>
+        <path d="M0 26H40" stroke="#fff" stroke-width="2.5"/>
       </svg>
-      <span><span class="brand-name">MACOY</span><span class="brand-sub">JAPAN・EST. 1849</span></span>
-    </a>
-    <nav class="pc-nav">
-      <a href="#shop">商品一覧</a>
-      <a href="#shop" data-cat="Fezzes">フェズ</a>
-      <a href="#shop" data-cat="Masonic Rings Jewelry">ジュエリー</a>
-      <a href="#about">Macoyについて</a>
-      <a href="#contact">お問い合わせ</a>
-    </nav>
-    <div class="hd-tools">
-      <button class="cart-btn" id="cartBtn" aria-label="カート">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 3h3l2.6 13h11.8l2.4-9H6.2"/></svg>
-        <span class="cart-count" id="cartCount">0</span>
-      </button>
-      <button class="menu-btn" id="menuBtn" aria-label="メニュー">☰</button>
-    </div>
-  </div>
-</header>
-
-<div class="overlay" id="overlay"></div>
-<aside class="drawer" id="drawer">
-  <button class="drawer-close" id="drawerClose" aria-label="閉じる">×</button>
-  <a href="#shop">商品一覧</a>
-  <a href="#shop" data-cat="Fezzes">フェズ</a>
-  <a href="#shop" data-cat="Masonic Rings Jewelry">ジュエリー</a>
-  <a href="#shop" data-cat="Masonic Aprons">エプロン</a>
-  <a href="#about">Macoyについて</a>
-  <a href="#contact">お問い合わせ</a>
-</aside>
-
-<main id="top">
-  <section class="hero">
-    <div>
-      <span class="hero-eyebrow">SINCE 1849 ・ RICHMOND, VA</span>
-      <h1>百七十余年、<br>儀礼に宿る<em>格式</em>を<br>仕立て続ける。</h1>
-      <p>Macoy Publishing & Masonic Supply Co. は、フリーメイソンおよびイースタンスター(OES)のレガリア、書籍、ロッジ用品を手がける米国の老舗。職人の手仕事による本物の儀礼用品を、日本語でご案内します。</p>
-      <div class="hero-cta">
-        <a class="btn btn-gold" href="#shop">コレクションを見る</a>
-        <a class="btn btn-line" href="#about">Macoyの歴史</a>
-      </div>
-    </div>
-    <div class="emblem-wrap">
-      <svg class="emblem" viewBox="0 0 300 300" fill="none">
-        <g class="rot-slow">
-          <circle cx="150" cy="150" r="140" stroke="#C9A24B" stroke-width=".7" opacity=".5"/>
-          <circle cx="150" cy="150" r="118" stroke="#C9A24B" stroke-width=".5" opacity=".35"/>
-          <polygon points="150,22 261,214 39,214" stroke="#C9A24B" stroke-width=".8" fill="none" opacity=".6"/>
-          <polygon points="150,278 39,86 261,86" stroke="#C9A24B" stroke-width=".8" fill="none" opacity=".6"/>
-        </g>
-        <g class="rot-rev">
-          <polygon points="150,45 174,118 250,118 189,163 212,236 150,191 88,236 111,163 50,118 126,118" stroke="#C9A24B" stroke-width="1.3" fill="rgba(201,162,75,.05)"/>
-        </g>
-        <circle cx="150" cy="150" r="34" stroke="#C9A24B" stroke-width="1"/>
-        <text x="150" y="158" text-anchor="middle" fill="#C9A24B" font-family="Cormorant Garamond,serif" font-size="22" letter-spacing="2">1849</text>
-      </svg>
-    </div>
-  </section>
-
-  <div class="stats">
-    <div class="stats-inner">
-      <div class="stat"><b>1849</b><span>創業年</span></div>
-      <div class="stat"><b>4,000+</b><span>取扱アイテム</span></div>
-      <div class="stat"><b>USA</b><span>アメリカ製レガリア</span></div>
-      <div class="stat"><b id="statTotal">-</b><span>本ページ掲載商品</span></div>
-    </div>
+      <span class="cart">[ CART ]</span>
+    </span>
   </div>
 
-  <section class="shop" id="shop">
-    <div class="sec-head">
-      <h2 class="sec-title"><small>COLLECTION</small>商品カタログ</h2>
-      <div class="rate-box">
-        <span>参考換算レート</span>
-        <span>$1 = ¥</span><input type="number" id="rateInput" value="150" min="1">
+  <!-- 1E product info -->
+  <div id="outro-info" class="fade-in" data-outro-offset="166">
+    <div class="top-block">
+      <div class="circle-wrap">
+        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" fill="none" style="width:100%;height:100%">
+          <circle cx="20" cy="20" r="18.75" stroke="#fff" stroke-width="2.5"/>
+        </svg>
+        <span id="circle-symbol">8</span>
       </div>
+      <div class="col-label">ARCHIVE COLLECTION<br>&quot;PROMPT&quot;</div>
     </div>
-
-    <div class="meta-bar">
-      <span class="source-tag" id="sourceTag">LOADING</span>
-      <span>データ更新: <b id="metaGen">-</b></span>
-      <span>該当: <b id="metaCount">0</b> 点</span>
-    </div>
-
-    <div class="filters" id="filters"></div>
-
-    <div class="toolbar">
-      <div class="search-box">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B93A5" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input type="text" id="searchInput" placeholder="商品名で検索(例:フェズ、リング)">
-      </div>
-      <select class="sort" id="sortSel">
-        <option value="feat">おすすめ順</option>
-        <option value="asc">価格が安い順</option>
-        <option value="desc">価格が高い順</option>
-        <option value="name">名前順</option>
-      </select>
-    </div>
-
-    <div class="grid" id="grid">
-      <div class="loading"><div class="spinner"></div><div>商品データを読み込み中…</div></div>
-    </div>
-    <div class="pagination" id="pager"></div>
-  </section>
-
-  <section class="shop" id="about" style="padding-top:20px">
-    <h2 class="sec-title" style="margin-bottom:20px"><small>ABOUT</small>Macoyについて</h2>
-    <p style="color:var(--mute);max-width:760px">Macoyは、生活賃金を得る米国の職人によって製作される最高品質のレガリアの提供に真摯に取り組んでいます。バージニア州リッチモンドを拠点に、深い調査に基づくメイソニック書籍の出版と、数千点におよぶロッジ運営用品の供給を続けています。</p>
-  </section>
-</main>
-
-<div class="modal" id="modal">
-  <div class="modal-card" style="position:relative">
-    <button class="modal-close" id="modalClose" aria-label="閉じる">×</button>
-    <div class="modal-img"><img id="mImg" src="" alt=""></div>
-    <div class="modal-info">
-      <span class="card-cat" id="mCat"></span>
-      <h3 id="mName"></h3>
-      <div class="card-price">
-        <span class="p-usd" id="mUsd"></span>
-        <span class="p-jpy" id="mJpy"></span>
-      </div>
-      <p id="mStock" style="font-size:.84rem"></p>
-      <p style="font-size:.8rem;color:var(--mute)">本体価格はUSD表記。円換算は上部レート入力に基づく参考値です。実際の在庫と価格は本家サイトでご確認ください。</p>
-      <button class="card-add" id="mAdd" style="margin-top:auto">カートに追加</button>
-      <a class="modal-link" id="mLink" href="#" target="_blank" rel="noopener">macoy.com で商品ページを見る →</a>
-    </div>
+    <div class="price">$97,33</div>
   </div>
+
+  <!-- 1F view button -->
+  <a id="outro-buy" href="catalog.html"><span>view</span></a>
+
+  <!-- 1J footer -->
+  <div id="outro-footer">
+    <span>PRMPT (R) 2026</span>
+    <span>PRIVACY POLICY</span>
+  </div>
+
+  <!-- 1A custom cursor -->
+  <div id="cursor">
+    <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <circle cx="24" cy="24" r="22.75" stroke="#fff" stroke-width="2.5"/>
+      <path fill="#fff" d="M24 12l2.2 8.2 8.2-2.2-6 6 6 6-8.2-2.2L24 36l-2.2-8.2-8.2 2.2 6-6-6-6 8.2 2.2z"/>
+    </svg>
+  </div>
+
 </div>
 
-<div class="toast" id="toast">カートに追加しました</div>
-
-<footer id="contact">
-  <div class="ft-inner">
-    <div>
-      <h4>MACOY PUBLISHING & MASONIC SUPPLY CO., INC.</h4>
-      <p>11310 Business Center Dr, Suite A<br>Richmond, VA 23236, USA<br>TEL: 1-804-262-6551</p>
-    </div>
-    <div>
-      <h4>インフォメーション</h4>
-      <a href="https://www.macoy.com/AboutUs.aspx" target="_blank" rel="noopener">会社概要</a>
-      <a href="https://www.macoy.com/Shipping.aspx" target="_blank" rel="noopener">配送について</a>
-      <a href="https://www.macoy.com/Return-Policy-Macoy" target="_blank" rel="noopener">返品ポリシー</a>
-      <a href="https://www.macoy.com/History.aspx" target="_blank" rel="noopener">Macoyの歴史</a>
-    </div>
-    <div>
-      <h4>アカウント</h4>
-      <a href="https://www.macoy.com/Login" target="_blank" rel="noopener">ログイン</a>
-      <a href="https://www.macoy.com/Members/MyOrders" target="_blank" rel="noopener">注文履歴</a>
-      <a href="https://www.macoy.com/Members/MyWishlist" target="_blank" rel="noopener">ウィッシュリスト</a>
-      <a href="https://www.macoy.com/ContactUs" target="_blank" rel="noopener">お問い合わせ</a>
-    </div>
-  </div>
-  <div class="ft-note">本ページは macoy.com の日本語版デモUIです。商品データは products.json (macoy_scraper.py で生成) から読み込みます。未生成時は同梱フォールバックを表示します。</div>
-</footer>
-
 <script>
-// ================================================================
-// 画像プロキシ設定
-// macoy.com はホットリンクブロック(403)のため、
-// Cloudflare Worker 経由で画像を取得する。
-//
-// 【設定手順】
-//   1. macoy-img-proxy.js を Cloudflare Workers にデプロイ
-//   2. 発行されたWorker URLを下の IMG_PROXY に設定する
-//      例: 'https://macoy-img-proxy.yourname.workers.dev'
-//   3. '' のままにしておくと直リンクにフォールバック
-//      (ローカル確認用 / Workerデプロイ前)
-// ================================================================
-const IMG_PROXY = ''; // 例: 'https://macoy-img-proxy.yourname.workers.dev'
+(function () {
+  'use strict';
 
-function proxyImg(originalUrl) {
-  if (!originalUrl) return originalUrl;
-  if (!originalUrl.startsWith('http')) return originalUrl; // ローカル画像(images/xxx.jpg)はそのまま
-  if (!IMG_PROXY) return originalUrl;
-  const path = originalUrl.replace('https://www.macoy.com', '');
-  return `${IMG_PROXY}/?path=${encodeURIComponent(path)}`;
-}
+  var vh = window.innerHeight;
+  var isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches
+             || window.innerWidth < 1024;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// フォールバックデータ (products.json 未生成時に表示)
-const FALLBACK_ITEMS = [
-{n:'OES ホワイトスターフェズ 1インチ ラインストーンピン付',c:'Fezzes',p:124.00,s:1,img:'https://www.macoy.com/Assets/ProductImages/1587spWhiYlg_wite_backgorund_t.jpg',u:'https://www.macoy.com/OES-Supplies/OES-FEZ-/-Eastern-Star-Sash/OES-White-Star-Fez-with-1-rhinestone-OES-rhinestone-pin-7041.aspx'},
-{n:'ラインストーン刺繍シュラインフェズ ダブルロウ フェルト',c:'Fezzes',p:394.00,s:1,img:'https://www.macoy.com/Assets/ProductImages/1603_t.jpg',u:'https://www.macoy.com/Masonic-Aprons/Masonic-Hats-Fezzes-Fez-Cases/The-Rhinestone-Embroidered-Shrine-Fez-Double-Row-Felt-7011.aspx'},
-{n:'OES ブラックスターフェズ 1インチ ラインストーンピン付',c:'Fezzes',p:124.00,s:1,img:'https://www.macoy.com/Assets/1478_1713/1587SPBLKYLG_t.jpg',u:'https://www.macoy.com/OES-Supplies/OES-FEZ-/-Eastern-Star-Sash/OES-Black-Star-Fez-with-1-rhinestone-OES-rhinestone-pin.aspx'},
-{n:'OES ホワイトフェズ スター&12インチタッセル付',c:'Fezzes',p:119.00,s:1,img:'https://www.macoy.com/Assets/ProductImages/1539W_t.jpg',u:'https://www.macoy.com/OES-Supplies/OES-FEZ-/-Eastern-Star-Sash/OES-White-Stock-fez-with-Star-and-12-tassel-3414.aspx'},
-{n:'プレーンフェズ スウェットバンド&キャリーバッグ付',c:'Fezzes',p:91.00,s:1,img:'https://www.macoy.com/Assets/ProductImages/1570_t.png',u:'https://www.macoy.com/Masonic-Aprons/Masonic-Hats-Fezzes-Fez-Cases/Plain-Fez-with-sweatband-5006.aspx'},
-{n:'ナイツテンプラー フェズ レタリング入り',c:'Fezzes',p:125.00,s:1,img:'https://www.macoy.com/Assets/ProductImages/1575_t.jpg',u:'https://www.macoy.com/Masonic-Aprons/Masonic-Hats-Fezzes-Fez-Cases/Knights-Templar-Fez-with-Lettering-5809.aspx'},
-{n:'OES ラインストーンピン',c:'Masonic Rings Jewelry',p:11.50,s:2,img:'https://www.macoy.com/Assets/ProductImages/ACC38S_t.png',u:'https://www.macoy.com/OES-Supplies/Fezzes/OES-Rhinestone-Pin'},
-{n:'【クリアランス】ゴールド OES パストメイトロン 10Kリング',c:'Sales Clearance',p:715.00,s:2,sale:1,img:'https://www.macoy.com/Assets/ProductImages/clearance ring 1_t.jpg',u:'https://www.macoy.com/OES-Supplies/Eastern-Star-Rings/Gold-OES-Past-Matron-Ring-Size-9-only-R5523'},
-{n:'OES セラミック カーコースター',c:'Sales Clearance',p:9.50,s:2,sale:1,img:'https://www.macoy.com/Assets/ProductImages/8307Redo_t.jpg',u:'https://www.macoy.com/OES-Supplies/OES-Auto-and-Eastern-Star-Gifts/OES-Ceramic-Car-Coaster-6623.aspx'}
-];
+  var spacer = document.getElementById('scroll-spacer');
+  var panel = document.getElementById('black-panel');
+  var wrap = document.getElementById('panel-wrap');
+  var grid = document.getElementById('panel-grid');
+  var canvas = document.getElementById('main-canvas');
+  var vidL = document.getElementById('vid-left');
+  var vidR = document.getElementById('vid-right');
+  var overlay = document.getElementById('outro-overlay');
+  var footer = document.getElementById('outro-footer');
+  var info = document.getElementById('outro-info');
+  var buy = document.getElementById('outro-buy');
+  var symbol = document.getElementById('circle-symbol');
+  var cursor = document.getElementById('cursor');
 
-let ALL = [];
-let state = {cat:'すべて', q:'', sort:'feat', rate:150, cart:0, page:1, perPage:24};
+  /* ---------- entry animations (staggered) ---------- */
+  var entries = [
+    ['logo', 0], ['nav', 150], ['caption', 300], ['outro-info', 450]
+  ];
+  entries.forEach(function (e) {
+    setTimeout(function () {
+      document.getElementById(e[0]).classList.add('in');
+    }, e[1] + 30);
+  });
 
-const grid = document.getElementById('grid');
-const filtersEl = document.getElementById('filters');
-const pager = document.getElementById('pager');
+  /* ---------- gallery images ---------- */
+  var IMGS = [
+    'hf_20260629_104530_521b2f85-c0f3-4d0e-9704-b578315b4cb9.png',
+    'hf_20260629_103711_76ccdb8b-5043-4f47-9c54-4379713393ea.png',
+    'hf_20260629_103728_394f6a1b-85e2-4386-a4f6-408472a0a5b7.png',
+    'hf_20260629_103739_86743e0e-16a7-4bee-bf38-dd67985344dc.png',
+    'hf_20260629_103748_b2215dc8-a3a7-470d-b19a-5b87fa7d0c37.png',
+    'hf_20260629_103758_e919ce72-5c9d-4b87-9be6-d7647b34825c.png',
+    'hf_20260629_103808_013583d0-3386-4547-9832-37c7d8edb3ac.png',
+    'hf_20260629_103937_a0c49d0a-33eb-4ead-aea6-c1baf241acbc.png',
+    'hf_20260629_103956_d18ed8fd-7b6f-4b86-91f9-20010fe38670.png',
+    'hf_20260629_104034_ba5a9963-87ff-4008-a545-6bd686c088b5.png'
+  ].map(function (f) {
+    return 'https://images.higgs.ai/?default=1&output=webp&url=' +
+      encodeURIComponent('https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/' + f) +
+      '&w=1920&q=85';
+  });
 
-async function loadData(){
-  try{
-    const res = await fetch('products.json',{cache:'no-cache'});
-    if(!res.ok) throw new Error('no products.json');
-    const j = await res.json();
-    ALL = j.items || [];
-    document.getElementById('sourceTag').textContent = 'LIVE DATA';
-    document.getElementById('metaGen').textContent = j.generated_at || '-';
-  }catch(e){
-    ALL = FALLBACK_ITEMS;
-    document.getElementById('sourceTag').textContent = 'FALLBACK';
-    document.getElementById('metaGen').textContent = 'scraper未実行';
+  /* ---------- grid layout algorithm ---------- */
+  function cols() {
+    var w = window.innerWidth;
+    if (w < 640) return 2;
+    if (w < 1024) return 3;
+    return 4;
   }
-  document.getElementById('statTotal').textContent = ALL.length.toLocaleString('ja-JP');
-  buildCategoryChips();
-  render();
-}
-
-function buildCategoryChips(){
-  const counts = {};
-  ALL.forEach(p=>{counts[p.c]=(counts[p.c]||0)+1;});
-  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(e=>e[0]);
-  const cats = ['すべて',...sorted.slice(0,12),'セール'];
-  filtersEl.innerHTML='';
-  [...new Set(cats)].forEach(c=>{
-    const b=document.createElement('button');
-    b.className='chip'+(c==='すべて'?' active':'');
-    b.textContent = c==='すべて'||c==='セール'?c:`${c}${counts[c]?' ('+counts[c]+')':''}`;
-    b.dataset.cat=c;
-    b.onclick=()=>{state.cat=c; state.page=1;
-      document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x===b));
-      render();};
-    filtersEl.appendChild(b);
-  });
-}
-
-function yen(usd){return '約 ¥'+Math.round(usd*state.rate).toLocaleString('ja-JP');}
-function stockLabel(s){return s===0?'在庫切れ':s===1?'受注確認(要オプション選択)':'在庫あり・即納可';}
-function stockBadge(s){return s===0?'<span class="badge sold">在庫切れ</span>':s===1?'<span class="badge order">受注確認</span>':'<span class="badge stock">在庫あり</span>';}
-
-function filtered(){
-  let list = ALL.filter(p=>{
-    const catOk = state.cat==='すべて' || p.c===state.cat || (state.cat==='セール'&&p.sale);
-    const qOk = !state.q || p.n.toLowerCase().includes(state.q);
-    return catOk && qOk;
-  });
-  if(state.sort==='asc') list=[...list].sort((a,b)=>a.p-b.p);
-  if(state.sort==='desc') list=[...list].sort((a,b)=>b.p-a.p);
-  if(state.sort==='name') list=[...list].sort((a,b)=>a.n.localeCompare(b.n,'ja'));
-  return list;
-}
-
-function render(){
-  const list = filtered();
-  document.getElementById('metaCount').textContent = list.length.toLocaleString('ja-JP');
-  const totalPages = Math.max(1,Math.ceil(list.length/state.perPage));
-  if(state.page>totalPages) state.page=totalPages;
-  const start = (state.page-1)*state.perPage;
-  const pageItems = list.slice(start,start+state.perPage);
-
-  grid.innerHTML='';
-  if(!pageItems.length){
-    grid.innerHTML='<div class="empty">該当する商品が見つかりませんでした。検索条件を変えてお試しください。</div>';
-    pager.innerHTML=''; return;
+  function buildLayout(count, c) {
+    var cells = [];
+    var placed = 0, r = 0;
+    while (placed < count) {
+      var row = [];
+      for (var i = 0; i < c; i++) row.push(-1);
+      var a = (r * 2 + (r % 2)) % c;
+      row[a] = placed++;
+      if (r % 3 === 0 && placed < count) {
+        var b = (a + 2) % c;
+        if (b === a) b = (a + 1) % c;
+        row[b] = placed++;
+      }
+      cells = cells.concat(row);
+      r++;
+    }
+    return cells;
   }
 
-  pageItems.forEach((p,i)=>{
-    const card=document.createElement('article');
-    card.className='card';
-    card.innerHTML=`
-      <div class="card-img">
-        ${stockBadge(p.s)}
-        ${p.sale?'<span class="badge sale">SALE</span>':''}
-        <img src="${proxyImg(p.img)}" alt="${p.n}" loading="lazy" onerror="this.parentElement.style.background='#1c2436';this.style.display='none'">
-      </div>
-      <div class="card-body">
-        <span class="card-cat">${p.c}</span>
-        <div class="card-name">${p.n}</div>
-        <div class="card-price">
-          <span class="p-usd">$${Number(p.p).toFixed(2)}</span>
-          <span class="p-jpy">${yen(p.p)}</span>
-        </div>
-        <button class="card-add">カートに追加</button>
-      </div>`;
-    card.querySelector('.card-add').onclick=(e)=>{e.stopPropagation();addCart();};
-    card.onclick=()=>openModal(p);
-    grid.appendChild(card);
-    setTimeout(()=>card.classList.add('in'), 30*Math.min(i,10));
-  });
-  renderPager(totalPages);
-}
+  var cards = [];
+  function renderGrid() {
+    var c = cols();
+    grid.style.gridTemplateColumns = 'repeat(' + c + ', 1fr)';
+    grid.innerHTML = '';
+    cards = [];
+    var cells = buildLayout(IMGS.length, c);
+    cells.forEach(function (idx, i) {
+      if (idx === -1) {
+        var sp = document.createElement('div');
+        sp.className = 'bp-empty';
+        grid.appendChild(sp);
+        return;
+      }
+      var d = document.createElement('div');
+      d.className = 'bp-card';
+      var col = i % c;
+      d.style.transformOrigin = (col < c / 2) ? 'right bottom' : 'left bottom';
+      var img = document.createElement('img');
+      img.src = IMGS[idx];
+      img.alt = 'archive ' + (idx + 1);
+      img.loading = 'lazy';
+      d.appendChild(img);
+      grid.appendChild(d);
+      cards.push(d);
+    });
+  }
+  renderGrid();
 
-function renderPager(total){
-  pager.innerHTML='';
-  if(total<=1) return;
-  const mk=(label,pg,disabled,on)=>{
-    const b=document.createElement('button');
-    b.textContent=label;
-    if(on) b.classList.add('on');
-    if(disabled) b.disabled=true;
-    b.onclick=()=>{state.page=pg; render(); document.getElementById('shop').scrollIntoView({behavior:'smooth'});};
-    return b;
-  };
-  pager.appendChild(mk('‹',state.page-1,state.page===1,false));
-  const win=2;
-  for(let i=1;i<=total;i++){
-    if(i===1||i===total||(i>=state.page-win&&i<=state.page+win)){
-      pager.appendChild(mk(i,i,false,i===state.page));
-    }else if(i===state.page-win-1||i===state.page+win+1){
-      const s=document.createElement('span');s.textContent='…';s.style.color='var(--mute)';s.style.padding='0 4px';
-      pager.appendChild(s);
+  /* ---------- spacer height ---------- */
+  var maxScroll = 0;
+  function measure() {
+    vh = window.innerHeight;
+    maxScroll = Math.max(0, wrap.scrollHeight - vh);
+    spacer.style.height = (vh + maxScroll + 2 * vh) + 'px';
+  }
+  measure();
+
+  /* ---------- video load fade-in ---------- */
+  var loaded = 0;
+  function onVidReady() {
+    loaded++;
+    if (loaded >= 2) canvas.style.opacity = '1';
+  }
+  [vidL, vidR].forEach(function (v) {
+    if (v.readyState >= 2) onVidReady();
+    else v.addEventListener('loadeddata', onVidReady, { once: true });
+  });
+  setTimeout(function () { canvas.style.opacity = '1'; }, 2500);
+
+  /* ---------- desktop: cursor scrub / mobile: alternate autoplay ---------- */
+  var mouseX = window.innerWidth / 2;
+  var activeSide = 'right';
+
+  if (isTouch) {
+    if (!reduced) {
+      vidR.style.display = 'none';
+      vidL.style.display = 'block';
+      vidL.play().catch(function () {});
+      vidL.addEventListener('ended', function () {
+        vidL.style.display = 'none';
+        vidR.style.display = 'block';
+        vidR.currentTime = 0;
+        vidR.play().catch(function () {});
+      });
+      vidR.addEventListener('ended', function () {
+        vidR.style.display = 'none';
+        vidL.style.display = 'block';
+        vidL.currentTime = 0;
+        vidL.play().catch(function () {});
+      });
+    }
+  } else {
+    document.addEventListener('mousemove', function (e) {
+      mouseX = e.clientX;
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  }
+
+  function scrubVideos() {
+    if (isTouch) return;
+    var w = window.innerWidth;
+    var center = w / 2;
+    var dead = Math.max(30, w * 0.05);
+    var v, progress;
+
+    if (Math.abs(mouseX - center) <= dead) {
+      v = (activeSide === 'left') ? vidR : vidL;
+      var cur = (activeSide === 'right') ? vidR : vidL;
+      /* dead zone: keep at 0, show last active */
+      if (!cur.seeking && cur.currentTime !== 0) cur.currentTime = 0;
+      return;
+    }
+    if (mouseX < center - dead) {
+      /* left of dead zone: show RIGHT video */
+      if (activeSide !== 'right') {
+        activeSide = 'right';
+        vidL.style.display = 'none';
+        vidR.style.display = 'block';
+      }
+      var range = center - dead;
+      progress = (center - dead - mouseX) / range;
+      v = vidR;
+    } else {
+      /* right of dead zone: show LEFT video */
+      if (activeSide !== 'left') {
+        activeSide = 'left';
+        vidR.style.display = 'none';
+        vidL.style.display = 'block';
+      }
+      var range2 = w - (center + dead);
+      progress = (mouseX - center - dead) / range2;
+      v = vidL;
+    }
+    progress = Math.max(0, Math.min(1, progress));
+    if (v.duration && !v.seeking) {
+      v.currentTime = progress * v.duration;
     }
   }
-  pager.appendChild(mk('›',state.page+1,state.page===total,false));
-}
 
-document.getElementById('searchInput').oninput=e=>{state.q=e.target.value.trim().toLowerCase();state.page=1;render();};
-document.getElementById('sortSel').onchange=e=>{state.sort=e.target.value;state.page=1;render();};
-document.getElementById('rateInput').oninput=e=>{state.rate=Math.max(1,+e.target.value||150);render();};
+  /* ---------- circle symbol randomize on scroll ---------- */
+  var SYMS = ['8', '$', '^^', '%', '/'];
+  var lastSym = 0;
+  window.addEventListener('scroll', function () {
+    var now = Date.now();
+    if (now - lastSym < 80) return;
+    lastSym = now;
+    symbol.textContent = SYMS[Math.floor(Math.random() * SYMS.length)];
+  }, { passive: true });
 
-function addCart(){
-  state.cart++;
-  document.getElementById('cartCount').textContent=state.cart;
-  const t=document.getElementById('toast');
-  t.classList.add('show');
-  clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove('show'),1800);
-}
-document.getElementById('cartBtn').onclick=()=>{
-  const t=document.getElementById('toast');
-  t.textContent=`カート内:${state.cart}点(デモ表示)`;
-  t.classList.add('show');
-  clearTimeout(t._tm); t._tm=setTimeout(()=>{t.classList.remove('show');t.textContent='カートに追加しました';},1800);
-};
+  /* ---------- card scaling ---------- */
+  function updateCards() {
+    for (var i = 0; i < cards.length; i++) {
+      var rect = cards[i].getBoundingClientRect();
+      var s;
+      if (rect.bottom <= 0 || rect.top >= vh) {
+        s = 0;
+      } else {
+        var enter = Math.min(1, (vh - rect.top) / (vh * 0.6));
+        var exit = Math.min(1, rect.bottom / (vh * 0.4));
+        s = Math.max(0, Math.min(enter, exit));
+      }
+      cards[i].style.transform = 'scale(' + s + ')';
+    }
+  }
 
-const modal=document.getElementById('modal');
-function openModal(p){
-  document.getElementById('mImg').src=proxyImg(p.img);
-  document.getElementById('mImg').alt=p.n;
-  document.getElementById('mCat').textContent=p.c+(p.sale?' / SALE':'');
-  document.getElementById('mName').textContent=p.n;
-  document.getElementById('mUsd').textContent='$'+Number(p.p).toFixed(2);
-  document.getElementById('mJpy').textContent=yen(p.p);
-  document.getElementById('mStock').innerHTML='在庫ステータス:<b style="color:'+(p.s===0?'#F4CDCD':p.s===1?'#F4E5BC':'#CFEBD8')+'">'+stockLabel(p.s)+'</b>';
-  document.getElementById('mLink').href=p.u;
-  modal.classList.add('show');
-  document.body.style.overflow='hidden';
-}
-function closeModal(){modal.classList.remove('show');document.body.style.overflow='';}
-document.getElementById('modalClose').onclick=closeModal;
-modal.onclick=e=>{if(e.target===modal)closeModal();};
-document.getElementById('mAdd').onclick=()=>{addCart();};
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+  /* ---------- main RAF loop: scroll phases ---------- */
+  var outroOffset = parseFloat(info.getAttribute('data-outro-offset')) || 166;
+  function applyOutroOffset() {
+    outroOffset = (window.innerWidth < 640) ? 132 : 166;
+  }
+  applyOutroOffset();
 
-const drawer=document.getElementById('drawer'),overlay=document.getElementById('overlay');
-document.getElementById('menuBtn').onclick=()=>{drawer.classList.add('open');overlay.classList.add('show');};
-function closeDrawer(){drawer.classList.remove('open');overlay.classList.remove('show');}
-document.getElementById('drawerClose').onclick=closeDrawer;
-overlay.onclick=closeDrawer;
+  function frame() {
+    var y = window.scrollY || window.pageYOffset;
 
-document.querySelectorAll('[data-cat]').forEach(a=>{
-  a.addEventListener('click',()=>{
-    const c=a.dataset.cat;
-    state.cat=c; state.page=1;
-    document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('active',x.dataset.cat===c));
-    render(); closeDrawer();
+    /* phase 1: panel slides up */
+    if (y <= vh) {
+      panel.style.transform = 'translateY(' + (vh - y) + 'px)';
+      wrap.style.transform = 'translateY(0)';
+    } else {
+      /* phase 2: panel fixed, inner wrapper scrolls */
+      panel.style.transform = 'translateY(0)';
+      wrap.style.transform = 'translateY(' + (-(y - vh)) + 'px)';
+    }
+
+    /* hide videos past first viewport */
+    canvas.style.visibility = (y > vh) ? 'hidden' : 'visible';
+
+    /* outro */
+    var op = 0;
+    if (y > vh + maxScroll) {
+      op = Math.max(0, Math.min(1, (y - vh - maxScroll) / (vh - 100)));
+    }
+    overlay.style.opacity = op;
+    footer.style.opacity = op;
+    info.style.transform = 'translateY(' + (-outroOffset * op) + 'px)';
+    buy.style.transform = 'scale(' + op + ')';
+    buy.style.pointerEvents = (op > 0.5) ? 'auto' : 'none';
+
+    updateCards();
+    scrubVideos();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* ---------- resize ---------- */
+  var rzT;
+  window.addEventListener('resize', function () {
+    clearTimeout(rzT);
+    rzT = setTimeout(function () {
+      renderGrid();
+      applyOutroOffset();
+      measure();
+    }, 150);
   });
-});
-
-loadData();
+  window.addEventListener('load', measure);
+})();
 </script>
 </body>
 </html>
