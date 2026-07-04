@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>prmpt | ARCHIVE COLLECTION</title>
+<title>MACOY JAPAN | メイソニック用品・OESレガリア 1849年創業</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500&display=swap" rel="stylesheet">
@@ -238,9 +238,22 @@ body {
 }
 .bp-card img {
   width: 100%; height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+  background: #0a0a0a;
 }
+.bp-card .cap {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 10px 12px;
+  font-size: 11px;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-transform: uppercase;
+  background: linear-gradient(to top, rgba(0,0,0,.72), transparent);
+}
+.bp-card { position: relative; }
 .bp-empty { aspect-ratio: 2 / 3; }
 @media (prefers-reduced-motion: reduce) {
   .bp-card { will-change: auto; }
@@ -319,18 +332,20 @@ body {
   <!-- 1B logo -->
   <div id="logo" class="fade-up">
     <svg viewBox="0 0 355 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
-      <text x="0" y="86" fill="#fff" font-family="'Inter Tight',sans-serif" font-weight="500"
-        font-size="104" letter-spacing="-6">prmpt</text>
-      <g transform="translate(322,14)">
+      <text x="0" y="82" fill="#fff" font-family="'Inter Tight',sans-serif" font-weight="500"
+        font-size="92" letter-spacing="-5">MACOY</text>
+      <g transform="translate(326,10)">
         <circle cx="14" cy="14" r="12.5" stroke="#fff" stroke-width="2.5" fill="none"/>
         <text x="14" y="19" fill="#fff" text-anchor="middle"
           font-family="'Inter Tight',sans-serif" font-weight="500" font-size="14">R</text>
       </g>
+      <text x="1" y="104" fill="#fff" font-family="'Inter Tight',sans-serif" font-weight="500"
+        font-size="15" letter-spacing="6">SINCE 1849 JAPAN</text>
     </svg>
   </div>
 
   <!-- 1C caption -->
-  <div id="caption" class="fade-up">When switching between videos near the center, do not reset currentTime to 0 abruptly. Add a small dead zone: if cursor is within +/-50px of center, keep both videos at currentTime = 0 and show whichever was last active.</div>
+  <div id="caption" class="fade-up">SINCE 1849 &nbsp;/&nbsp; RICHMOND, VA<br><br>百七十余年、儀礼に宿る格式を仕立て続ける。Macoy Publishing &amp; Masonic Supply Co. は、フリーメイソンおよびイースタンスター(OES)のレガリア、書籍、ロッジ用品を手がける米国の老舗。職人の手仕事による本物を、日本へ。</div>
 
   <!-- 1D nav -->
   <div id="nav" class="fade-up">
@@ -340,7 +355,7 @@ body {
         <path d="M0 14H40" stroke="#fff" stroke-width="2.5"/>
         <path d="M0 26H40" stroke="#fff" stroke-width="2.5"/>
       </svg>
-      <span class="cart">[ CART ]</span>
+      <span class="cart">[ CATALOG ]</span>
     </span>
   </div>
 
@@ -353,17 +368,17 @@ body {
         </svg>
         <span id="circle-symbol">8</span>
       </div>
-      <div class="col-label">ARCHIVE COLLECTION<br>&quot;PROMPT&quot;</div>
+      <div class="col-label">MASONIC REGALIA<br>COLLECTION</div>
     </div>
-    <div class="price">$97,33</div>
+    <div class="price">$332</div>
   </div>
 
   <!-- 1F view button -->
-  <a id="outro-buy" href="catalog.html"><span>view</span></a>
+  <a id="outro-buy" href="catalog.html"><span>shop</span></a>
 
   <!-- 1J footer -->
   <div id="outro-footer">
-    <span>PRMPT (R) 2026</span>
+    <span>MACOY (R) SINCE 1849</span>
     <span>PRIVACY POLICY</span>
   </div>
 
@@ -411,22 +426,19 @@ body {
   });
 
   /* ---------- gallery images ---------- */
-  var IMGS = [
-    'hf_20260629_104530_521b2f85-c0f3-4d0e-9704-b578315b4cb9.png',
-    'hf_20260629_103711_76ccdb8b-5043-4f47-9c54-4379713393ea.png',
-    'hf_20260629_103728_394f6a1b-85e2-4386-a4f6-408472a0a5b7.png',
-    'hf_20260629_103739_86743e0e-16a7-4bee-bf38-dd67985344dc.png',
-    'hf_20260629_103748_b2215dc8-a3a7-470d-b19a-5b87fa7d0c37.png',
-    'hf_20260629_103758_e919ce72-5c9d-4b87-9be6-d7647b34825c.png',
-    'hf_20260629_103808_013583d0-3386-4547-9832-37c7d8edb3ac.png',
-    'hf_20260629_103937_a0c49d0a-33eb-4ead-aea6-c1baf241acbc.png',
-    'hf_20260629_103956_d18ed8fd-7b6f-4b86-91f9-20010fe38670.png',
-    'hf_20260629_104034_ba5a9963-87ff-4008-a545-6bd686c088b5.png'
-  ].map(function (f) {
-    return 'https://images.higgs.ai/?default=1&output=webp&url=' +
-      encodeURIComponent('https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/' + f) +
-      '&w=1920&q=85';
-  });
+  var GALLERY = [
+    { img: 'images/1715.jpg', n: '33RD Degree Scottish Rite Gold Chain Collar' },
+    { img: 'images/1038_t.jpg', n: 'Blue Lodge Gold Plate Masonic Chain Collar' },
+    { img: 'images/2005New_t.jpg', n: 'Masonic Casket Apron' },
+    { img: 'images/b17_t.jpg', n: 'Masonic & OES Mourning Badges' },
+    { img: 'images/1040_1040R_t.jpg', n: "Officer's Collar Chain" },
+    { img: 'images/2501_t.jpg', n: 'Associate Matron Purple Velvet Sash' },
+    { img: 'images/SwordBelt_t.jpg', n: 'Masonic Sword Belt' },
+    { img: 'images/2068_t.JPG', n: 'Double Rayon Silk Ribbon Jewel Hangers' },
+    { img: 'images/1042.JPG', n: 'Grand Lodge Chain Collar, Purple Lining' },
+    { img: 'images/2107.JPG', n: 'Masonic Officer Collar, Royal Blue Trim' }
+  ];
+  var IMGS = GALLERY.map(function (g) { return g.img; });
 
   /* ---------- grid layout algorithm ---------- */
   function cols() {
@@ -473,10 +485,14 @@ body {
       var col = i % c;
       d.style.transformOrigin = (col < c / 2) ? 'right bottom' : 'left bottom';
       var img = document.createElement('img');
-      img.src = IMGS[idx];
-      img.alt = 'archive ' + (idx + 1);
+      img.src = GALLERY[idx].img;
+      img.alt = GALLERY[idx].n;
       img.loading = 'lazy';
       d.appendChild(img);
+      var cap = document.createElement('div');
+      cap.className = 'cap';
+      cap.textContent = GALLERY[idx].n;
+      d.appendChild(cap);
       grid.appendChild(d);
       cards.push(d);
     });
